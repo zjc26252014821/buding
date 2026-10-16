@@ -3,6 +3,7 @@ Name: Mango Panel Background Thermal Fix
 Version: 1.0.0
 Architecture: iphoneos-arm64e
 Depends: com.go.mango, local.mango.panelbackground
+Replaces: local.mango.panelbackground
 Description: Keeps custom Mango panel background video playback running when device thermal state is serious or critical; preserves other playback/power/lock handling.
 Maintainer: zjccrh-arch
 Author: zjccrh-arch
