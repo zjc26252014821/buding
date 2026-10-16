@@ -12,7 +12,7 @@ d = bytearray(p.read_bytes())
 #    the `thermal` playback state and selects the static-poster path.
 PATCHES = [
     (0x6F54, 0x540002ED, 0x14000017),
-    (0x7FD4, 0x5400006C, 0xD503201F),
+    (0x7FD4, 0x540006CC, 0xD503201F),
 ]
 for off, old, new in PATCHES:
     actual = struct.unpack_from('<I', d, off)[0]
