@@ -12,8 +12,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Install ldid
-        run: brew list ldid >/dev/null 2>&1 || brew install ldid
+      - name: Install build utilities
+        run: |
+          brew list ldid >/dev/null 2>&1 || brew install ldid
+          brew list dpkg >/dev/null 2>&1 || brew install dpkg
       - name: Install roothide Theos
         run: |
           git clone --recursive --depth 1 https://github.com/roothide/theos.git "$GITHUB_WORKSPACE/theos"
