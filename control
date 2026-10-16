@@ -1,6 +1,6 @@
 Package: local.mango.thermalfix
 Name: Mango Panel Background Thermal Fix
-Version: 1.0.0
+Version: 1.0.1
 Architecture: iphoneos-arm64e
 Depends: com.go.mango, local.mango.panelbackground
 Replaces: local.mango.panelbackground

@@ -5,14 +5,19 @@ import subprocess
 
 p = Path(sys.argv[1])
 d = bytearray(p.read_bytes())
-# arm64e MangoPanelBackgroundPlayback.dylib, __TEXT file offset == VM address
-# _PBUpdateTimer + 0xcc: `b.le 0x6fb0` after thermalState > 1 check.
-OFF = 0x6F54
-OLD = 0x540002ED       # b.le +0xcc (thermalState <= 1 -> continue)
-NEW = 0x14000017       # b 0x6fb0 (always continue playback path)
-old = struct.unpack_from('<I', d, OFF)[0]
-if old != OLD:
-    raise SystemExit(f'Unexpected instruction at {OFF:#x}: {old:#x}, expected {OLD:#x}')
-struct.pack_into('<I', d, OFF, NEW)
+# arm64e MangoPanelBackgroundPlayback.dylib, __TEXT file offset == VM address.
+# Patch both thermal gates:
+# 1) PBUpdateTimer + 0xcc: b.le 0x6fb0, keeps periodic playback alive.
+# 2) MGPBVideoView updatePlayback + 0xd4: b.gt 0x80ac, which records
+#    the `thermal` playback state and selects the static-poster path.
+PATCHES = [
+    (0x6F54, 0x540002ED, 0x14000017),
+    (0x7FD4, 0x5400006C, 0xD503201F),
+]
+for off, old, new in PATCHES:
+    actual = struct.unpack_from('<I', d, off)[0]
+    if actual != old:
+        raise SystemExit(f'Unexpected instruction at {off:#x}: {actual:#x}, expected {old:#x}')
+    struct.pack_into('<I', d, off, new)
+    print(f'patched {p}: {off:#x} {old:#010x} -> {new:#010x}')
 p.write_bytes(d)
-print(f'patched {p}: {OFF:#x} {OLD:#010x} -> {NEW:#010x}')
