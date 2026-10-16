@@ -10,6 +10,3 @@ MangoThermalFix_FRAMEWORKS = Foundation
 MangoThermalFix_LIBRARIES = substrate
 
 include $(THEOS_MAKE_PATH)/tweak.mk
-
-before-all::
-	python3 patch.py layout/Library/MobileSubstrate/DynamicLibraries/MangoPanelBackgroundPlayback.dylib
